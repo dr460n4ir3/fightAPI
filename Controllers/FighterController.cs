@@ -52,6 +52,17 @@ namespace fightAPI.Controllers
             
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<List<GetFighterResponseDto>>>> DeleteFighter(int id) // must add async <task> and await to return
+        {
+            var response = await _fighterService.DeleteFighter(id);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
         /*[HttpPut("{id}")]
         public ActionResult<Fighter> Update(int id, Fighter fighter)
         {

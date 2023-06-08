@@ -11,6 +11,7 @@ namespace fightAPI
         {
             CreateMap<Fighter, GetFighterResponseDto>(); 
             CreateMap<AddFighterRequestDto, Fighter>();
+            CreateMap<UpdateFighterRequestDto, Fighter>();
         }
     }
 }

@@ -55,7 +55,9 @@ namespace fightAPI.Services.FighterService
                     throw new Exception($"There is no Fighter with the Id of '{updatedFighter.Id}' please check the Id and try again.");
                 }
 
-                fighter.Name = updatedFighter.Name;
+                _mapper.Map(updatedFighter, fighter); // this is the same as the code below (commented out code)
+
+                /*fighter.Name = updatedFighter.Name;
                 fighter.Health = updatedFighter.Health;
                 fighter.Strength = updatedFighter.Strength;
                 fighter.Defense = updatedFighter.Defense;
@@ -63,7 +65,29 @@ namespace fightAPI.Services.FighterService
                 fighter.Class = updatedFighter.Class;
 
                 serviceResponse.Data = _mapper.Map<GetFighterResponseDto>(fighter);
-                return serviceResponse;
+                return serviceResponse;*/
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+                
+            }
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<List<GetFighterResponseDto>>> DeleteFighter(int id)
+        {
+            var serviceResponse = new ServiceResponse<List<GetFighterResponseDto>>();
+            try
+            {
+                var fighter = fighters.FirstOrDefault(f => f.Id == id);
+                if(fighter == null)
+                {
+                    throw new Exception($"There is no Fighter with the Id of '{id}' please check the Id and try again.");
+                }
+                fighters.Remove(fighter);
+                serviceResponse.Data = fighters.Select(f => _mapper.Map<GetFighterResponseDto>(f)).ToList();
             }
             catch (Exception ex)
             {

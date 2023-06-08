@@ -11,5 +11,6 @@ namespace fightAPI.Services.FighterService
         Task<ServiceResponse<GetFighterResponseDto>> GetFighterById(int id);
         Task<ServiceResponse<List<GetFighterResponseDto>>> CreateFighter(AddFighterRequestDto newFighter);
         Task<ServiceResponse<GetFighterResponseDto>> UpdateFighter(UpdateFighterRequestDto updatedFighter);
+        Task<ServiceResponse<List<GetFighterResponseDto>>> DeleteFighter(int id);
     }
 }
