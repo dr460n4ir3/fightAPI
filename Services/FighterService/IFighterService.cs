@@ -7,8 +7,8 @@ namespace fightAPI.Services.FighterService
 {
     public interface IFighterService
     {
-        List<Fighter> GetAllFighters();
-        Fighter GetSingleFighter(int id);
-        List<Fighter> CreateFighter(Fighter newFighter);
+        Task<ServiceResponse<List<Fighter>>> GetAllFighters();
+        Task<ServiceResponse<Fighter>> GetFighterById(int id);
+        Task<ServiceResponse<List<Fighter>>> CreateFighter(Fighter newFighter);
     }
 }

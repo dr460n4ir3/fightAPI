@@ -12,20 +12,27 @@ namespace fightAPI.Services.FighterService
             new Fighter { Id = 1, Name = "Luffy" }
         };
         
-        public List<Fighter> CreateFighter(Fighter newFighter)
+        public  async Task<ServiceResponse<List<Fighter>>> CreateFighter(Fighter newFighter)
         {
+            var serviceResponse = new ServiceResponse<List<Fighter>>();
             fighters.Add(newFighter);
-            return fighters;
+            serviceResponse.Data = fighters;
+            return serviceResponse;
         }
 
-        public List<Fighter> GetAllFighters()
+        public async Task<ServiceResponse<List<Fighter>>> GetAllFighters()
         {
-            return fighters;
+            var serviceResponse = new ServiceResponse<List<Fighter>>();
+            serviceResponse.Data = fighters;
+            return serviceResponse;
         }
 
-        public Fighter GetSingleFighter(int id)
+        public async Task<ServiceResponse<Fighter>> GetFighterById(int id)
         {
-            return fighters.FirstOrDefault(f => f.Id == id);
+            var serviceResponse = new ServiceResponse<Fighter>();
+            var fighter = fighters.FirstOrDefault(f => f.Id == id);
+            serviceResponse.Data = fighter;
+            return serviceResponse;
         }
     }
 }

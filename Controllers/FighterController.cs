@@ -18,26 +18,26 @@ namespace fightAPI.Controllers
         }
 
         [HttpGet("All")]
-        public ActionResult<List<Fighter>> Get() 
+        public async Task<ActionResult<ServiceResponse<List<Fighter>>>> Get() // must add async <task> and await to return
         {
-            return Ok(_fighterService.GetAllFighters());
+            return Ok(await _fighterService.GetAllFighters());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Fighter> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<Fighter>>> GetSingle(int id) // must add async <task> and await to return
         {
-            var fighter = _fighterService.GetSingleFighter(id);
+            var fighter = _fighterService.GetFighterById(id);
             if (fighter == null)
             {
                 return NotFound();
             }
-            return Ok(fighter);
+            return Ok(await fighter);
         }
 
         [HttpPost]
-        public ActionResult<List<Fighter>> Create(Fighter newFighter)
+        public async Task<ActionResult<ServiceResponse<List<Fighter>>>> CreateFighter(Fighter newFighter) // must add async <task> and await to return
         {
-            return Ok(_fighterService.CreateFighter(newFighter));
+            return Ok(await _fighterService.CreateFighter(newFighter));
         }
 
         /*[HttpPut("{id}")]
