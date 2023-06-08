@@ -18,13 +18,13 @@ namespace fightAPI.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<ActionResult<ServiceResponse<List<Fighter>>>> Get() // must add async <task> and await to return
+        public async Task<ActionResult<ServiceResponse<List<GetFighterResponseDto>>>> Get() // must add async <task> and await to return
         {
             return Ok(await _fighterService.GetAllFighters());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<Fighter>>> GetSingle(int id) // must add async <task> and await to return
+        public async Task<ActionResult<ServiceResponse<GetFighterResponseDto>>> GetSingle(int id) // must add async <task> and await to return
         {
             var fighter = _fighterService.GetFighterById(id);
             if (fighter == null)
@@ -35,9 +35,21 @@ namespace fightAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<Fighter>>>> CreateFighter(Fighter newFighter) // must add async <task> and await to return
+        public async Task<ActionResult<ServiceResponse<List<GetFighterResponseDto>>>> CreateFighter(AddFighterRequestDto newFighter) // must add async <task> and await to return
         {
             return Ok(await _fighterService.CreateFighter(newFighter));
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<GetFighterResponseDto>>> UpdateFighter(UpdateFighterRequestDto updatedFighter) // must add async <task> and await to return
+        {
+            var response = await _fighterService.UpdateFighter(updatedFighter);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+            
         }
 
         /*[HttpPut("{id}")]
