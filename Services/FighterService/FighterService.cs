@@ -11,10 +11,13 @@ namespace fightAPI.Services.FighterService
             new Fighter(),
             new Fighter { Id = 1, Name = "Luffy" }
         };
+        
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public FighterService(IMapper mapper)
+        public FighterService(IMapper mapper, DataContext context) // the DataContext is injected to connect to the database
         {
+            _context = context;
             _mapper = mapper;
         }
 
@@ -22,24 +25,25 @@ namespace fightAPI.Services.FighterService
         {
             var serviceResponse = new ServiceResponse<List<GetFighterResponseDto>>();
             var fighter = _mapper.Map<Fighter>(newFighter);
-            fighter.Id = fighters.Max(f => f.Id) + 1; // this is a hack to get the next id
-            fighters.Add(fighter);
-            serviceResponse.Data = fighters.Select(f => _mapper.Map<GetFighterResponseDto>(f)).ToList();
+            _context.Fighters.Add(fighter);
+            await _context.SaveChangesAsync(); // this saves the changes to the database
+            serviceResponse.Data = await _context.Fighters.Select(f => _mapper.Map<GetFighterResponseDto>(f)).ToListAsync();
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<List<GetFighterResponseDto>>> GetAllFighters()
         {
             var serviceResponse = new ServiceResponse<List<GetFighterResponseDto>>();
-            serviceResponse.Data = fighters.Select(f => _mapper.Map<GetFighterResponseDto>(f)).ToList();
+            var dbFighters = await _context.Fighters.ToListAsync();
+            serviceResponse.Data = dbFighters.Select(f => _mapper.Map<GetFighterResponseDto>(f)).ToList();
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<GetFighterResponseDto>> GetFighterById(int id)
         {
             var serviceResponse = new ServiceResponse<GetFighterResponseDto>();
-            var fighter = fighters.FirstOrDefault(f => f.Id == id);
-            serviceResponse.Data = _mapper.Map<GetFighterResponseDto>(fighter);
+            var dbFighter = await _context.Fighters.FirstOrDefaultAsync(f => f.Id == id);
+            serviceResponse.Data = _mapper.Map<GetFighterResponseDto>(dbFighter);
             return serviceResponse;
         }
 
@@ -49,14 +53,15 @@ namespace fightAPI.Services.FighterService
 
             try
             {
-                var fighter = fighters.FirstOrDefault(f => f.Id == updatedFighter.Id);
+                var fighter = await _context.Fighters.FirstOrDefaultAsync(f => f.Id == updatedFighter.Id);
                 if(fighter == null)
                 {
                     throw new Exception($"There is no Fighter with the Id of '{updatedFighter.Id}' please check the Id and try again.");
                 }
 
+                
                 _mapper.Map(updatedFighter, fighter); // this is the same as the code below (commented out code)
-
+                await _context.SaveChangesAsync(); // this saves the changes to the database
                 /*fighter.Name = updatedFighter.Name;
                 fighter.Health = updatedFighter.Health;
                 fighter.Strength = updatedFighter.Strength;
@@ -79,15 +84,17 @@ namespace fightAPI.Services.FighterService
         public async Task<ServiceResponse<List<GetFighterResponseDto>>> DeleteFighter(int id)
         {
             var serviceResponse = new ServiceResponse<List<GetFighterResponseDto>>();
+
             try
             {
-                var fighter = fighters.FirstOrDefault(f => f.Id == id);
+                var fighter = await _context.Fighters.FirstOrDefaultAsync(f => f.Id == id);
                 if(fighter == null)
                 {
                     throw new Exception($"There is no Fighter with the Id of '{id}' please check the Id and try again.");
                 }
-                fighters.Remove(fighter);
-                serviceResponse.Data = fighters.Select(f => _mapper.Map<GetFighterResponseDto>(f)).ToList();
+                _context.Fighters.Remove(fighter);
+                await _context.SaveChangesAsync(); // this saves the changes to the database
+                serviceResponse.Data = await _context.Fighters.Select(f => _mapper.Map<GetFighterResponseDto>(f)).ToListAsync();
             }
             catch (Exception ex)
             {
