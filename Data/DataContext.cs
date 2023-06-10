@@ -13,5 +13,6 @@ namespace fightAPI.Data
         }
 
         public DbSet<Fighter> Fighters => Set<Fighter>();
+        public DbSet<User> Users => Set<User>();
     }
 }

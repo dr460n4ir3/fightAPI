@@ -16,5 +16,6 @@ namespace fightAPI.Models
         //public int Speed { get; set; } = 10;
         public int Intelligence { get; set; } = 10;
         public BattleClass Class { get; set; } = BattleClass.Tank;
+        public User? User { get; set; }
     }
 }

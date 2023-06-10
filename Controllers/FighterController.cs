@@ -62,34 +62,5 @@ namespace fightAPI.Controllers
             }
             return Ok(response);
         }
-
-        /*[HttpPut("{id}")]
-        public ActionResult<Fighter> Update(int id, Fighter fighter)
-        {
-            var fighterToUpdate = fighters.FirstOrDefault(f => f.Id == id);
-            if (fighterToUpdate == null)
-            {
-                return NotFound();
-            }
-            fighterToUpdate.Name = fighter.Name;
-            fighterToUpdate.Health = fighter.Health;
-            fighterToUpdate.Strength = fighter.Strength;
-            fighterToUpdate.Defense = fighter.Defense;
-            fighterToUpdate.Intelligence = fighter.Intelligence;
-            fighterToUpdate.Class = fighter.Class;
-            return Ok(fighterToUpdate);
-        }
-
-        [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
-        {
-            var fighterToDelete = fighters.FirstOrDefault(f => f.Id == id);
-            if (fighterToDelete == null)
-            {
-                return NotFound();
-            }
-            fighters.Remove(fighterToDelete);
-            return Ok();
-        }*/
     }
 }
