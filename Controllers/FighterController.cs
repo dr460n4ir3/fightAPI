@@ -20,7 +20,12 @@ namespace fightAPI.Controllers
             _fighterService = fighterService;
         }
 
-        [AllowAnonymous] // AllowAnonymous allows us to access this method without a token
+        /* **** Note: Need to fix User Fighter relationships 
+        currently you must add relationships manually to DB 
+        otherwise when use the get All fighters route it
+        will only return empty results! **** */
+
+        //[AllowAnonymous] // AllowAnonymous allows us to access this method without a token
         [HttpGet("All")]
         public async Task<ActionResult<ServiceResponse<List<GetFighterResponseDto>>>> Get() // must add async <task> and await to return
         {
