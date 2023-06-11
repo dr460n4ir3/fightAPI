@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fightAPI.Controllers
 {
+    [Authorize] // Authorize requires a token to access any of the methods
     [ApiController]
     [Route("api/[controller]")]
     public class FighterController : ControllerBase
@@ -17,10 +20,12 @@ namespace fightAPI.Controllers
             _fighterService = fighterService;
         }
 
+        [AllowAnonymous] // AllowAnonymous allows us to access this method without a token
         [HttpGet("All")]
         public async Task<ActionResult<ServiceResponse<List<GetFighterResponseDto>>>> Get() // must add async <task> and await to return
         {
-            return Ok(await _fighterService.GetAllFighters());
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
+            return Ok(await _fighterService.GetAllFighters(userId));
         }
 
         [HttpGet("{id}")]

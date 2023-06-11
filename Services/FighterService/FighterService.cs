@@ -31,10 +31,10 @@ namespace fightAPI.Services.FighterService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetFighterResponseDto>>> GetAllFighters()
+        public async Task<ServiceResponse<List<GetFighterResponseDto>>> GetAllFighters(int userId)
         {
             var serviceResponse = new ServiceResponse<List<GetFighterResponseDto>>();
-            var dbFighters = await _context.Fighters.ToListAsync();
+            var dbFighters = await _context.Fighters.Where(c => c.User!.Id ==userId).ToListAsync();
             serviceResponse.Data = dbFighters.Select(f => _mapper.Map<GetFighterResponseDto>(f)).ToList();
             return serviceResponse;
         }
